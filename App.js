@@ -1,57 +1,29 @@
-import React, { useState } from "react";
-import { StyleSheet, View, FlatList, Button } from "react-native";
-import GoalItem from "./components/GoalItem";
-import GoalInput from "./components/GoalInput";
+import React from "react";
+import { StyleSheet, View, Text } from "react-native";
+import Header from "./components/Header";
 
 export default function App() {
-  const [courseGoalsState, setCourseGoalsState] = useState([]);
-  const [isAddModeState, setIsAddModeState] = useState(false);
-
-  const addGoalHandler = (goalTitle) => {
-    setCourseGoalsState((currentGoals) => [
-      ...currentGoals,
-      { anID: Math.random().toString(), value: goalTitle },
-    ]);
-    setIsAddModeState(false);
-  };
-
-  const removeGoalHandler = (goalId) => {
-    // note, react will batch the state changes below and then rerender
-    // i.e. not re-rendering after each
-    setCourseGoalsState((currentGoals) => {
-      return currentGoals.filter((goal) => goal.anID !== goalId);
-    });
-  };
-
-  const cancelGoalAddHandler = () => {
-    setIsAddModeState(false);
-  };
-
   return (
-    <View style={styles.screen}>
-      <Button title="Add New Goal" onPress={() => setIsAddModeState(true)} />
-      <GoalInput
-        visible={isAddModeState}
-        onAddGoal={addGoalHandler}
-        onCancel={cancelGoalAddHandler}
-      />
-      <FlatList
-        keyExtractor={(item, index) => item.anID}
-        data={courseGoalsState}
-        renderItem={(itemData) => (
-          <GoalItem
-            id={itemData.item.anID}
-            title={itemData.item.value}
-            onDelete={removeGoalHandler}
-          />
-        )}
+    <View style={styles.header}>
+      <Header
+        style={styles.headerTitle}
+        title="Lets build another simple app"
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    padding: 50,
+  header: {
+    width: "100%",
+    height: 90,
+    paddingTop: 36,
+    backgroundColor: "#f7287b",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerTitle: {
+    color: "black",
+    fontSize: 18,
   },
 });
