@@ -12,18 +12,29 @@ export default function App() {
       ...currentGoals,
       { anID: Math.random().toString(), value: goalTitle },
     ]);
+    setIsAddModeState(false);
   };
 
   const removeGoalHandler = (goalId) => {
+    // note, react will batch the state changes below and then rerender
+    // i.e. not re-rendering after each
     setCourseGoalsState((currentGoals) => {
       return currentGoals.filter((goal) => goal.anID !== goalId);
     });
   };
 
+  const cancelGoalAddHandler = () => {
+    setIsAddModeState(false);
+  };
+
   return (
     <View style={styles.screen}>
       <Button title="Add New Goal" onPress={() => setIsAddModeState(true)} />
-      <GoalInput visible={isAddModeState} onAddGoal={addGoalHandler} />
+      <GoalInput
+        visible={isAddModeState}
+        onAddGoal={addGoalHandler}
+        onCancel={cancelGoalAddHandler}
+      />
       <FlatList
         keyExtractor={(item, index) => item.anID}
         data={courseGoalsState}
