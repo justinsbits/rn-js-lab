@@ -17,8 +17,11 @@ export default function App() {
     setEnteredGoalState(enteredText);
   };
   const addGoalHandler = () => {
-    // setCourseGoals([...courseGoalsState, enteredGoal]);
-    setCourseGoalsState((currentGoals) => [...currentGoals, enteredGoalState]);
+    // setCourseGoalsState((currentGoals) => [...currentGoals, enteredGoalState]);
+    setCourseGoalsState((currentGoals) => [
+      ...currentGoals,
+      { anID: Math.random().toString(), value: enteredGoalState },
+    ]);
   };
   return (
     <View style={styles.screen}>
@@ -32,21 +35,22 @@ export default function App() {
           />
           <Button title="Add" onPress={addGoalHandler} />
         </View>
-        <ScrollView>
+        {/* <ScrollView>
           {courseGoalsState.map((goal) => (
             <View key={goal} style={styles.listItem}>
               <Text>{goal}</Text>
             </View>
           ))}
-        </ScrollView>
-        {/* <FlatList
+        </ScrollView> */}
+        <FlatList
+          keyExtractor={(item, index) => item.anID}
           data={courseGoalsState}
           renderItem={(itemData) => (
             <View style={styles.listItem}>
-              <Text>{itemData.item}</Text>
+              <Text>{itemData.item.value}</Text>
             </View>
           )}
-        /> */}
+        />
       </View>
     </View>
   );
