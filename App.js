@@ -8,33 +8,23 @@ import {
   FlatList,
   Button,
 } from "react-native";
+import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInput";
 
 export default function App() {
-  const [enteredGoalState, setEnteredGoalState] = useState("");
   const [courseGoalsState, setCourseGoalsState] = useState([]);
 
-  const goalInputHandler = (enteredText) => {
-    setEnteredGoalState(enteredText);
-  };
-  const addGoalHandler = () => {
-    // setCourseGoalsState((currentGoals) => [...currentGoals, enteredGoalState]);
+  const addGoalHandler = goalTitle => {
     setCourseGoalsState((currentGoals) => [
       ...currentGoals,
-      { anID: Math.random().toString(), value: enteredGoalState },
+      { anID: Math.random().toString(), value: goalTitle },
     ]);
   };
+
   return (
     <View style={styles.screen}>
       <View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder="Course Goal"
-            style={styles.input}
-            onChangeText={goalInputHandler}
-            value={enteredGoalState}
-          />
-          <Button title="Add" onPress={addGoalHandler} />
-        </View>
+        <GoalInput onAddGoal={addGoalHandler} />
         {/* <ScrollView>
           {courseGoalsState.map((goal) => (
             <View key={goal} style={styles.listItem}>
@@ -45,11 +35,7 @@ export default function App() {
         <FlatList
           keyExtractor={(item, index) => item.anID}
           data={courseGoalsState}
-          renderItem={(itemData) => (
-            <View style={styles.listItem}>
-              <Text>{itemData.item.value}</Text>
-            </View>
-          )}
+          renderItem={(itemData) => <GoalItem title={itemData.item.value} />}
         />
       </View>
     </View>
@@ -59,23 +45,5 @@ export default function App() {
 const styles = StyleSheet.create({
   screen: {
     padding: 50,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-  },
-  input: {
-    width: "80%",
-    borderBottomColor: "black",
-    borderBottomWidth: 1,
-    padding: 10,
-  },
-  listItem: {
-    padding: 10,
-    marginVertical: 10,
-    backgroundColor: "#ccc",
-    borderColor: "black",
-    borderWidth: 1,
   },
 });
