@@ -19,16 +19,18 @@ const GameScreen = (props) => {
     // generated only for initial state
     generateRandomBetween(1, 100, props.userChoice)
   );
+  const [rounds, setRounds] = useState(0);
 
   // utilize useRef instead of useState so change in value doesn't result in rerender
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
+  const { userChoice, onGameOver } = props; // destructuring so that values can be used for dependency check in useEffect below without concern for other prop values
 
   useEffect(() => {
     if (currentGuess === props.userChoice) {
-      Alert.alert("Game Over!");
+      props.onGameOver(rounds);
     }
-  });
+  }, [currentGuess, userChoice, onGameOver]); // 2nd of useEffect arg is array of dependencies - i.e. only execute if one of the dependencies has changed
 
   const nextGuessHandler = (direction) => {
     if (
@@ -42,9 +44,9 @@ const GameScreen = (props) => {
     }
 
     if (direction === "lower") {
-      currentHigh.current = currentGuess;
+      currentHigh.current = currentGuess - 1;
     } else {
-      currentLow.current = currentGuess;
+      currentLow.current = currentGuess + 1;
     }
 
     const nextNumber = generateRandomBetween(
@@ -53,6 +55,7 @@ const GameScreen = (props) => {
       currentGuess
     );
     setCurrentGuess(nextNumber);
+    setRounds((curRounds) => curRounds + 1);
   };
 
   return (
