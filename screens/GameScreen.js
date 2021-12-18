@@ -1,5 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, View, Text, Button, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  Alert,
+  ScrollView,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
 import NumberContainer from "../components/NumberContainer";
 import Card from "../components/Card";
 import MainButton from "../components/MainButton";
@@ -16,11 +25,9 @@ const generateRandomBetween = (min, max, exclude) => {
 };
 
 const GameScreen = (props) => {
-  const [currentGuess, setCurrentGuess] = useState(
-    // generated only for initial state
-    generateRandomBetween(1, 100, props.userChoice)
-  );
-  const [rounds, setRounds] = useState(0);
+  const initialGuess = generateRandomBetween(1, 100, props.userChoice);
+  const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const [pastGuesses, setPastGuesses] = useState([initialGuess]);
 
   // utilize useRef instead of useState so change in value doesn't result in rerender
   const currentLow = useRef(1);
@@ -29,7 +36,7 @@ const GameScreen = (props) => {
 
   useEffect(() => {
     if (currentGuess === props.userChoice) {
-      props.onGameOver(rounds);
+      props.onGameOver(pastGuesses.length);
     }
   }, [currentGuess, userChoice, onGameOver]); // 2nd of useEffect arg is array of dependencies - i.e. only execute if one of the dependencies has changed
 
@@ -45,9 +52,9 @@ const GameScreen = (props) => {
     }
 
     if (direction === "lower") {
-      currentHigh.current = currentGuess - 1;
+      currentHigh.current = currentGuess;
     } else {
-      currentLow.current = currentGuess + 1;
+      currentLow.current = currentGuess + 1; // !!! generateRandomBetween is inclusive of lower bound, exlusive of upper - confusing/need to fix
     }
 
     const nextNumber = generateRandomBetween(
@@ -56,7 +63,9 @@ const GameScreen = (props) => {
       currentGuess
     );
     setCurrentGuess(nextNumber);
-    setRounds((curRounds) => curRounds + 1);
+
+    // note: using 'currentGuess' instead of 'nextNumber' would not work because state not yet updated
+    setPastGuesses((curPastGuesses) => [nextNumber, ...curPastGuesses]);
   };
 
   return (
@@ -65,12 +74,19 @@ const GameScreen = (props) => {
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
         <MainButton onPress={nextGuessHandler.bind(this, "lower")}>
-          LOWER
+          <Ionicons name="md-remove" size={24} />
         </MainButton>
         <MainButton onPress={nextGuessHandler.bind(this, "greater")}>
-          GREATER
+          <Ionicons name="md-add" size={24} />
         </MainButton>
       </Card>
+      <ScrollView>
+        {pastGuesses.map((guess) => (
+          <View key={guess}>
+            <Text>{guess}</Text>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 };
