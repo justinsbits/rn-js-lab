@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
-  StyleSheet,
   View,
   Text,
-  Button,
+  StyleSheet,
   Alert,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -26,28 +26,27 @@ const generateRandomBetween = (min, max, exclude) => {
   }
 };
 
-const renderListItem = (value, numberOfRound) => (
-  <View key={value} style={styles.listItem}>
-    <BodyText>#{numberOfRound}</BodyText>
-    <BodyText>{value}</BodyText>
+const renderListItem = (listLength, itemData) => (
+  <View style={styles.listItem}>
+    <BodyText>#{listLength - itemData.index}</BodyText>
+    <BodyText>{itemData.item}</BodyText>
   </View>
 );
 
 const GameScreen = (props) => {
   const initialGuess = generateRandomBetween(1, 100, props.userChoice);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
-  const [pastGuesses, setPastGuesses] = useState([initialGuess]);
-
-  // utilize useRef instead of useState so change in value doesn't result in rerender
+  const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
-  const { userChoice, onGameOver } = props; // destructuring so that values can be used for dependency check in useEffect below without concern for other prop values
+
+  const { userChoice, onGameOver } = props;
 
   useEffect(() => {
-    if (currentGuess === props.userChoice) {
-      props.onGameOver(pastGuesses.length);
+    if (currentGuess === userChoice) {
+      onGameOver(pastGuesses.length);
     }
-  }, [currentGuess, userChoice, onGameOver]); // 2nd of useEffect arg is array of dependencies - i.e. only execute if one of the dependencies has changed
+  }, [currentGuess, userChoice, onGameOver]);
 
   const nextGuessHandler = (direction) => {
     if (
@@ -59,22 +58,22 @@ const GameScreen = (props) => {
       ]);
       return;
     }
-
     if (direction === "lower") {
       currentHigh.current = currentGuess;
     } else {
-      currentLow.current = currentGuess + 1; // !!! generateRandomBetween is inclusive of lower bound, exlusive of upper - confusing/need to fix
+      currentLow.current = currentGuess + 1;
     }
-
     const nextNumber = generateRandomBetween(
       currentLow.current,
       currentHigh.current,
       currentGuess
     );
     setCurrentGuess(nextNumber);
-
-    // note: using 'currentGuess' instead of 'nextNumber' would not work because state not yet updated
-    setPastGuesses((curPastGuesses) => [nextNumber, ...curPastGuesses]);
+    // setRounds(curRounds => curRounds + 1);
+    setPastGuesses((curPastGuesses) => [
+      nextNumber.toString(),
+      ...curPastGuesses,
+    ]);
   };
 
   return (
@@ -90,11 +89,15 @@ const GameScreen = (props) => {
         </MainButton>
       </Card>
       <View style={styles.listContainer}>
-        <ScrollView contentContainerStyle={styles.list}>
-          {pastGuesses.map((guess, index) =>
-            renderListItem(guess, pastGuesses.length - index)
-          )}
-        </ScrollView>
+        {/* <ScrollView contentContainerStyle={styles.list}>
+          {pastGuesses.map((guess, index) => renderListItem(guess, pastGuesses.length - index))}
+        </ScrollView> */}
+        <FlatList
+          keyExtractor={(item) => item}
+          data={pastGuesses}
+          renderItem={renderListItem.bind(this, pastGuesses.length)}
+          contentContainerStyle={styles.list}
+        />
       </View>
     </View>
   );
@@ -115,11 +118,11 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    width: "80%",
+    width: "60%",
   },
   list: {
     flexGrow: 1,
-    alignItems: "center",
+    // alignItems: 'center',
     justifyContent: "flex-end",
   },
   listItem: {
@@ -130,7 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "60%",
+    width: "100%",
   },
 });
 
