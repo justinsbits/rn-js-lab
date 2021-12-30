@@ -1,7 +1,4 @@
 import { Platform } from "react-native";
-//import { createAppContainer } from "react-navigation";
-//import { createStackNavigator } from "react-navigation-stack";
-
 import { createStackNavigator } from "@react-navigation/stack";
 
 import CategoriesScreen, {
@@ -48,29 +45,3 @@ export const MealsNavigator = (props) => {
   );
 };
 
-// const MealsNavigator = createStackNavigator(
-//   {
-//     Categories: CategoriesScreen,
-//     CategoryMeals: {
-//       screen: CategoryMealsScreen,
-//     },
-//     MealDetail: MealDetailScreen,
-//   },
-//   {
-//     // initialRouteName: 'Categories' - not required since is default, just example of setting
-
-//     // applied to all screens in this navigator
-//     // merged with above options as well as navigationOptions on component
-//     // Default below overriden by component navigationOptions, overriden by above navigator/component specific (above)
-//     defaultNavigationOptions: {
-//       headerStyle: {
-//         backgroundColor:
-//           Platform.OS === "android" ? Colors.primaryColor : "white",
-//       },
-//       headerTintColor:
-//         Platform.OS === "android" ? "white" : Colors.primaryColor,
-//     },
-//   }
-// );
-
-//export default createAppContainer(MealsNavigator);
