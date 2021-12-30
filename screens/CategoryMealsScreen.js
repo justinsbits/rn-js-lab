@@ -13,19 +13,15 @@ const CategoryMealScreen = (props) => {
         complexity={itemData.item.complexity}
         affordability={itemData.item.affordability}
         onSelectMeal={() => {
-          props.navigation.navigate({
-            routeName: "MealDetail",
-            params: {
-              mealId: itemData.item.id,
-            },
+          props.navigation.navigate("MealDetail", {
+            mealId: itemData.item.id,
           });
         }}
       />
     );
   };
 
-  const catId = props.navigation.getParam("categoryId");
-  //const selectedCategory = CATEGORIES.find((cat) => cat.id === catId);
+  const catId = props.route.params.categoryId;
   const displayedMeals = MEALS.filter(
     (meal) => meal.categoryIds.indexOf(catId) >= 0
   );
@@ -39,17 +35,14 @@ const CategoryMealScreen = (props) => {
       />
     </View>
   );
-
-  //   data={props.listData}
-  // keyExtractor={(item, index) => item.id}
-  // renderItem={renderMealItem}
-  // style={{ width: '100%' }}
 };
 
-// can be static (see CategoriesScree) or via func that returns dynamic options
-CategoryMealScreen.navigationOptions = (navigationData) => {
-  //console.log(navigationData);
-  const catId = navigationData.navigation.getParam("categoryId");
+// can be static (see CategoriesScreen) or via func that returns dynamic options
+export const categoryMealsScreenOptions = (navigationData) => {
+  
+  // ??? why not working
+  
+  const catId = navigationData.route.params.categoryId;
   const selectedCategory = CATEGORIES.find((cat) => cat.id === catId);
   return {
     headerTitle: selectedCategory.title,

@@ -4,7 +4,7 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import { enableScreens } from "react-native-screens";
 
-import MealsNavigator from "./navigation/MealsNavigator";
+import AppNavigator from "./navigation/AppNavigator";
 
 enableScreens(); // improved perf for larger apps -  configure react-navigation to use screens instead of plain RN Views for rendering screen views
 
@@ -28,5 +28,5 @@ export default function App() {
     );
   }
 
-  return <MealsNavigator />;
+  return <AppNavigator />;
 }

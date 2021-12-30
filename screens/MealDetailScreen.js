@@ -1,12 +1,11 @@
 import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
-import { Header } from "react-native/Libraries/NewAppScreen";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { MEALS } from "../data/dummy-data";
 import CustomHeaderButton from "../components/HeaderButton";
 
 const MealDetailScreen = (props) => {
-  const mealId = props.navigation.getParam("mealId");
+  const mealId = props.route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
   return (
     <View style={styles.screen}>
@@ -21,8 +20,8 @@ const MealDetailScreen = (props) => {
   );
 };
 
-MealDetailScreen.navigationOptions = (navigationData) => {
-  const mealId = navigationData.navigation.getParam("mealId");
+export const mealDetailScreenOptions = (navigationData) => {
+  const mealId = navigationData.route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
   return {
     headerTitle: selectedMeal.title,
