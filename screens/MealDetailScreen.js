@@ -1,10 +1,8 @@
-import React from "react";
 import {
   ScrollView,
   Image,
   View,
   Text,
-  Button,
   StyleSheet,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";

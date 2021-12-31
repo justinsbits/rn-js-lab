@@ -1,13 +1,7 @@
-import React from "react";
 import {
-  View,
-  Text,
-  Button,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
 } from "react-native";
-import { CommonActions } from "@react-navigation/native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import HeaderButton from "../components/HeaderButton";
