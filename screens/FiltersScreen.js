@@ -36,7 +36,6 @@ const FiltersScreen = (props) => {
       vegan: isVegan,
       vegetarion: isVegetarion,
     };
-    console.log(appliedFilters);
   }, [isGlutenFree, isLactoseFree, isVegan, isVegetarion]);
 
   // destructure navigation for use in dependency array

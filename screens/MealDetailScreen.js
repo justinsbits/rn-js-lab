@@ -1,10 +1,4 @@
-import {
-  ScrollView,
-  Image,
-  View,
-  Text,
-  StyleSheet,
-} from "react-native";
+import { ScrollView, Image, View, Text, StyleSheet } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { MEALS } from "../data/dummy-data";
 import CustomHeaderButton from "../components/HeaderButton";
@@ -21,7 +15,6 @@ const ListItem = (props) => {
 const MealDetailScreen = (props) => {
   const mealId = props.route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
-  console.log(selectedMeal.imageUrl);
   return (
     <ScrollView>
       <Image source={{ uri: selectedMeal.imageUrl }} style={styles.image} />
