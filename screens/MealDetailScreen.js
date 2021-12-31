@@ -1,6 +1,6 @@
 import { ScrollView, Image, View, Text, StyleSheet } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { MEALS } from "../data/dummy-data";
+import { useSelector } from "react-redux";
 import CustomHeaderButton from "../components/HeaderButton";
 import DefaultText from "../components/DefaultText";
 
@@ -14,7 +14,9 @@ const ListItem = (props) => {
 
 const MealDetailScreen = (props) => {
   const mealId = props.route.params.mealId;
-  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+  const allMeals = useSelector((state) => state.meals.meals);
+  const selectedMeal = allMeals.find((meal) => meal.id === mealId);
+
   return (
     <ScrollView>
       <Image source={{ uri: selectedMeal.imageUrl }} style={styles.image} />
@@ -36,17 +38,17 @@ const MealDetailScreen = (props) => {
 };
 
 export const mealDetailScreenOptions = (navigationData) => {
-  const mealId = navigationData.route.params.mealId;
-  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+  const mealTitle = navigationData.route.params.mealTitle;
+
   return {
-    headerTitle: selectedMeal.title,
+    headerTitle: mealTitle,
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
           title="Favorite"
           iconName="ios-star"
           onPress={() => {
-            console.log("Mark as favorite!");
+            console.log("Mark as favorite!!");
           }}
         />
       </HeaderButtons>
