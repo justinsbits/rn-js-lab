@@ -1,8 +1,10 @@
+import { useCallback, useEffect } from "react";
 import { ScrollView, Image, View, Text, StyleSheet } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import CustomHeaderButton from "../components/HeaderButton";
 import DefaultText from "../components/DefaultText";
+import { toggleFavorite } from "../store/actions/meals";
 
 const ListItem = (props) => {
   return (
@@ -15,7 +17,29 @@ const ListItem = (props) => {
 const MealDetailScreen = (props) => {
   const mealId = props.route.params.mealId;
   const allMeals = useSelector((state) => state.meals.meals);
+  const currentMealIsFavorite = useSelector((state) =>
+    state.meals.favoriteMeals.some((meal) => meal.id === mealId)
+  );
   const selectedMeal = allMeals.find((meal) => meal.id === mealId);
+
+  const dispatch = useDispatch();
+  const toggleFavoriteHandler = useCallback(() => {
+    dispatch(toggleFavorite(mealId));
+  }, [mealId]);
+
+  useEffect(() => {
+    props.navigation.setOptions({
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title="Favorite"
+            iconName={currentMealIsFavorite ? "ios-star" : "ios-star-outline"}
+            onPress={toggleFavoriteHandler}
+          />
+        </HeaderButtons>
+      ),
+    });
+  }, [currentMealIsFavorite, toggleFavoriteHandler]);
 
   return (
     <ScrollView>
@@ -39,20 +63,8 @@ const MealDetailScreen = (props) => {
 
 export const mealDetailScreenOptions = (navigationData) => {
   const mealTitle = navigationData.route.params.mealTitle;
-
   return {
     headerTitle: mealTitle,
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title="Favorite"
-          iconName="ios-star"
-          onPress={() => {
-            console.log("Mark as favorite!!");
-          }}
-        />
-      </HeaderButtons>
-    ),
   };
 };
 
