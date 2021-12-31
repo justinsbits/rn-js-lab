@@ -3,7 +3,6 @@
     "name": "rn-js-lab",
     "slug": "rn-js-lab",
     "version": "1.0.0",
-    "sdkVersion": "44.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
