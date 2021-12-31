@@ -1,5 +1,7 @@
 import { Platform } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
 
 import CategoriesScreen, {
   categoriesScreenOptions,
@@ -10,6 +12,9 @@ import CategoryMealsScreen, {
 import MealDetailScreen, {
   mealDetailScreenOptions,
 } from "../screens/MealDetailScreen";
+
+import FavoritesScreen from "../screens/FavoritesScreen";
+
 import Colors from "../constants/Colors";
 
 // applied to all screens in navigator
@@ -22,8 +27,42 @@ const defaultNavOptions = {
   headerTintColor: Platform.OS === "android" ? "white" : Colors.primaryColor,
 };
 
+const defaultTabBarOptions = {
+  activeTintColor: Colors.accentColor,
+};
+
+const mealTabNavIcons = {
+  tabBarIcon: ({ focused, color, size }) => {
+    return <Ionicons name="ios-restaurant" size={25} color={color} />;
+  },
+};
+
+const favTabNavIcons = {
+  tabBarIcon: ({ focused, color, size }) => {
+    return <Ionicons name="ios-star" size={25} color={color} />;
+  },
+};
+
 const MealsStackNavigator = createStackNavigator();
+const MealsFavTabNavigator = createBottomTabNavigator();
 export const MealsNavigator = (props) => {
+  return (
+    <MealsFavTabNavigator.Navigator tabBarOptions={defaultTabBarOptions}>
+      <MealsFavTabNavigator.Screen
+        name="Meals"
+        component={MealsStackNavigatorContainer}
+        options={mealTabNavIcons}
+      />
+      <MealsFavTabNavigator.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={favTabNavIcons}
+      />
+    </MealsFavTabNavigator.Navigator>
+  );
+};
+
+const MealsStackNavigatorContainer = (props) => {
   return (
     <MealsStackNavigator.Navigator screenOptions={defaultNavOptions}>
       <MealsStackNavigator.Screen
@@ -44,4 +83,3 @@ export const MealsNavigator = (props) => {
     </MealsStackNavigator.Navigator>
   );
 };
-
