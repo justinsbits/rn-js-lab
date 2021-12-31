@@ -8,8 +8,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { CommonActions } from "@react-navigation/native";
-import { CATEGORIES } from "../data/dummy-data";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+
+import HeaderButton from "../components/HeaderButton";
 import CategoryGridTile from "../components/CategoryGridTile";
+
+import { CATEGORIES } from "../data/dummy-data";
 
 const CategoriesScreen = (props) => {
   const renderGridItem = (itemData) => {
@@ -37,8 +41,21 @@ const CategoriesScreen = (props) => {
   );
 };
 
-export const categoriesScreenOptions = {
-  headerTitle: "Meal Categories",
+export const categoriesScreenOptions = (navData) => {
+  return {
+    headerTitle: "Meal Categories",
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Menu"
+          iconName="ios-menu"
+          onPress={() => {
+            navData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
+  };
 };
 
 const styles = StyleSheet.create({

@@ -16,8 +16,7 @@ import MealDetailScreen, {
 import FavoritesScreen, {
   favoritesScreenOptions,
 } from "../screens/FavoritesScreen";
-
-import FiltersScreen from "../screens/FiltersScreen"; //favoritesScreenOptions,
+import FiltersScreen, { filtersScreenOptions } from "../screens/FiltersScreen";
 
 import Colors from "../constants/Colors";
 
@@ -28,41 +27,13 @@ const defaultStackNavOptions = {
   headerStyle: {
     backgroundColor: Platform.OS === "android" ? Colors.primaryColor : "white",
   },
+  headerTitleStyle: {
+    fontFamily: "open-sans-bold",
+  },
+  headerBackTitleStyle: {
+    fontFamily: "open-sans", //iOS
+  },
   headerTintColor: Platform.OS === "android" ? "white" : Colors.primaryColor,
-};
-
-const defaultTabBarOptions = {
-  activeTintColor: Colors.accentColor,
-};
-
-const mealTabNavIcons = {
-  tabBarIcon: ({ focused, color, size }) => {
-    return <Ionicons name="ios-restaurant" size={25} color={color} />;
-  },
-};
-
-const favTabNavIcons = {
-  tabBarIcon: ({ focused, color, size }) => {
-    return <Ionicons name="ios-star" size={25} color={color} />;
-  },
-};
-
-const MealsBottomTabNav = createBottomTabNavigator();
-const MealsBottomTabNavigator = (props) => {
-  return (
-    <MealsBottomTabNav.Navigator tabBarOptions={defaultTabBarOptions}>
-      <MealsBottomTabNav.Screen
-        name="Meals"
-        component={MealsStackNavigator}
-        options={mealTabNavIcons}
-      />
-      <MealsBottomTabNav.Screen
-        name="Favorites"
-        component={FavoritesStackNavigator}
-        options={favTabNavIcons}
-      />
-    </MealsBottomTabNav.Navigator>
-  );
 };
 
 const MealsStackNav = createStackNavigator();
@@ -88,6 +59,41 @@ const MealsStackNavigator = (props) => {
   );
 };
 
+const mainDrawerContentOptions = {
+  activeTintColor: Colors.accentColor,
+  labelStyle: {
+    fontFamily: "open-sans-bold",
+  },
+};
+
+const mainDrawerFavoritesNavOptions = {
+  drawerLabel: "Favorites",
+};
+
+const mainDrawerFiltersNavOptions = {
+  drawerLabel: "Filters",
+};
+
+const MainMealsDrawerNav = createDrawerNavigator();
+export const MainMealsDrawerNavigator = (props) => {
+  return (
+    <MainMealsDrawerNav.Navigator
+      drawerContentOptions={mainDrawerContentOptions}
+    >
+      <MainMealsDrawerNav.Screen
+        name="MealsFavs"
+        component={MainBottomTabNavigator}
+        options={mainDrawerFavoritesNavOptions}
+      />
+      <MainMealsDrawerNav.Screen
+        name="MealsFilters"
+        component={FiltersStackNavigator}
+        options={mainDrawerFiltersNavOptions}
+      />
+    </MainMealsDrawerNav.Navigator>
+  );
+};
+
 const FavoritesStackNav = createStackNavigator();
 const FavoritesStackNavigator = (props) => {
   return (
@@ -105,6 +111,43 @@ const FavoritesStackNavigator = (props) => {
   );
 };
 
+const defaultMainBottomTabBarOptions = {
+  labelStyle: {
+    fontFamily: "open-sans",
+  },
+  activeTintColor: Colors.accentColor,
+};
+
+const mainBottomTabNavMealsOptions = {
+  tabBarIcon: ({ focused, color, size }) => {
+    return <Ionicons name="ios-restaurant" size={25} color={color} />;
+  },
+};
+
+const mainBottomTabNavFavoritesOptions = {
+  tabBarIcon: ({ focused, color, size }) => {
+    return <Ionicons name="ios-star" size={25} color={color} />;
+  },
+};
+
+const MainBottomTabNav = createBottomTabNavigator();
+const MainBottomTabNavigator = (props) => {
+  return (
+    <MainBottomTabNav.Navigator tabBarOptions={defaultMainBottomTabBarOptions}>
+      <MainBottomTabNav.Screen
+        name="Meals"
+        component={MealsStackNavigator}
+        options={mainBottomTabNavMealsOptions}
+      />
+      <MainBottomTabNav.Screen
+        name="Favorites"
+        component={FavoritesStackNavigator}
+        options={mainBottomTabNavFavoritesOptions}
+      />
+    </MainBottomTabNav.Navigator>
+  );
+};
+
 const FiltersStackNav = createStackNavigator();
 const FiltersStackNavigator = (props) => {
   return (
@@ -115,15 +158,5 @@ const FiltersStackNavigator = (props) => {
         options={filtersScreenOptions}
       />
     </FiltersStackNav.Navigator>
-  );
-};
-
-const MainNav = createDrawerNavigator();
-export const MainNavigator = (props) => {
-  return (
-    <MainNav.Navigator>
-      <MainNav.Screen name="MealsFavs" component={MealsBottomTabNavigator} />
-      <MainNav.Screen name="Filters" component={FiltersStackNavigator} />
-    </MainNav.Navigator>
   );
 };
