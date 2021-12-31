@@ -39,9 +39,6 @@ const CategoryMealScreen = (props) => {
 
 // can be static (see CategoriesScreen) or via func that returns dynamic options
 export const categoryMealsScreenOptions = (navigationData) => {
-  
-  // ??? why not working
-  
   const catId = navigationData.route.params.categoryId;
   const selectedCategory = CATEGORIES.find((cat) => cat.id === catId);
   return {
