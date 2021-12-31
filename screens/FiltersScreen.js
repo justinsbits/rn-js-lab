@@ -38,13 +38,10 @@ const FiltersScreen = (props) => {
     };
   }, [isGlutenFree, isLactoseFree, isVegan, isVegetarion]);
 
-  // destructure navigation for use in dependency array
-  const { navigation } = props;
   // any time state changes...
   // communicate between component and navigation item via props.navigation.setOptions
   // in the case below, if saveFilters changes then ensure to apply the related side effect via saveFilters
   useEffect(() => {
-    console.log(navigation);
     props.navigation.setOptions({
       headerRight: (navData) => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
