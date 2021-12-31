@@ -13,7 +13,9 @@ import MealDetailScreen, {
   mealDetailScreenOptions,
 } from "../screens/MealDetailScreen";
 
-import FavoritesScreen from "../screens/FavoritesScreen";
+import FavoritesScreen, {
+  favoritesScreenOptions,
+} from "../screens/FavoritesScreen";
 
 import Colors from "../constants/Colors";
 
@@ -43,6 +45,7 @@ const favTabNavIcons = {
   },
 };
 
+const FavoritesStackNavigator = createStackNavigator();
 const MealsStackNavigator = createStackNavigator();
 const MealsFavTabNavigator = createBottomTabNavigator();
 export const MealsNavigator = (props) => {
@@ -55,7 +58,7 @@ export const MealsNavigator = (props) => {
       />
       <MealsFavTabNavigator.Screen
         name="Favorites"
-        component={FavoritesScreen}
+        component={FavoritesStackNavigatorContainer}
         options={favTabNavIcons}
       />
     </MealsFavTabNavigator.Navigator>
@@ -81,5 +84,21 @@ const MealsStackNavigatorContainer = (props) => {
         options={mealDetailScreenOptions}
       />
     </MealsStackNavigator.Navigator>
+  );
+};
+
+const FavoritesStackNavigatorContainer = (props) => {
+  return (
+    <FavoritesStackNavigator.Navigator screenOptions={defaultNavOptions}>
+      <FavoritesStackNavigator.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={favoritesScreenOptions}
+      />
+      <FavoritesStackNavigator.Screen
+        name="MealDetail"
+        component={MealDetailScreen}
+      />
+    </FavoritesStackNavigator.Navigator>
   );
 };
