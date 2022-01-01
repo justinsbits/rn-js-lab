@@ -2,11 +2,16 @@ import { useState, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
 import { Switch } from "react-native-gesture-handler";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
 import HeaderButton from "../components/HeaderButton";
 import Colors from "../constants/Colors";
-import { setFilters } from '../store/actions/meals';
+import { setFilters } from "../store/actions/meals";
+
+// NOTE: 
+// current implementation
+// - filters not applied to 'favorites' only the standard meals list
+// - filters must be saved via the 'disk' icon to take effect
 
 const FilterSwitch = (props) => {
   return (
@@ -40,7 +45,7 @@ const FiltersScreen = (props) => {
       vegan: isVegan,
       vegetarian: isVegetarian,
     };
-    
+
     dispatch(setFilters(appliedFilters));
   }, [isGlutenFree, isLactoseFree, isVegan, isVegetarian]);
 
