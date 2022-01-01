@@ -2,9 +2,11 @@ import { useState, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
 import { Switch } from "react-native-gesture-handler";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { useDispatch } from 'react-redux';
 
 import HeaderButton from "../components/HeaderButton";
 import Colors from "../constants/Colors";
+import { setFilters } from '../store/actions/meals';
 
 const FilterSwitch = (props) => {
   return (
@@ -24,7 +26,9 @@ const FiltersScreen = (props) => {
   const [isGlutenFree, setIsGlutenFree] = useState(false);
   const [isLactoseFree, setIsLactoseFree] = useState(false);
   const [isVegan, setIsVegan] = useState(false);
-  const [isVegetarion, setIsVegetarion] = useState(false);
+  const [isVegetarian, setIsVegetarian] = useState(false);
+
+  const dispatch = useDispatch();
 
   // useCallback to cache representation of state, only recreated when state changes
   // so the state object (appliedFilters) returned by saveFilters only recreated where a 'dependency' changes
@@ -34,9 +38,11 @@ const FiltersScreen = (props) => {
       glutenFree: isGlutenFree,
       lactoseFree: isLactoseFree,
       vegan: isVegan,
-      vegetarion: isVegetarion,
+      vegetarian: isVegetarian,
     };
-  }, [isGlutenFree, isLactoseFree, isVegan, isVegetarion]);
+    
+    dispatch(setFilters(appliedFilters));
+  }, [isGlutenFree, isLactoseFree, isVegan, isVegetarian]);
 
   // any time state changes...
   // communicate between component and navigation item via props.navigation.setOptions
@@ -66,9 +72,9 @@ const FiltersScreen = (props) => {
       />
       <FilterSwitch label="Vegan" state={isVegan} onStateChange={setIsVegan} />
       <FilterSwitch
-        label="Vegetarion"
-        state={isVegetarion}
-        onStateChange={setIsVegetarion}
+        label="Vegetarian"
+        state={isVegetarian}
+        onStateChange={setIsVegetarian}
       />
     </View>
   );
