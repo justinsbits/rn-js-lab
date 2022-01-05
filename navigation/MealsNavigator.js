@@ -17,6 +17,7 @@ import FavoritesScreen, {
   favoritesScreenOptions,
 } from "../screens/FavoritesScreen";
 import FiltersScreen, { filtersScreenOptions } from "../screens/FiltersScreen";
+import AuthScreen, { authScreenOptions } from "../screens/AuthScreen";
 
 import Colors from "../constants/Colors";
 
@@ -158,5 +159,19 @@ const FiltersStackNavigator = (props) => {
         options={filtersScreenOptions}
       />
     </FiltersStackNav.Navigator>
+  );
+};
+
+const AuthStackNavigator = createStackNavigator();
+
+export const AuthNavigator = () => {
+  return (
+    <AuthStackNavigator.Navigator screenOptions={defaultStackNavOptions}>
+      <AuthStackNavigator.Screen
+        name="Auth"
+        component={AuthScreen}
+        options={authScreenOptions}
+      />
+    </AuthStackNavigator.Navigator>
   );
 };
