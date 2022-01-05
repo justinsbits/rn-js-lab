@@ -1,13 +1,8 @@
-import React, { useReducer, useCallback } from "react";
-import {
-  StyleSheet,
-  View,
-  KeyboardAvoidingView,
-  ScrollView,
-  Text,
-  Button,
-} from "react-native";
+import React, { useState, useReducer, useCallback } from "react";
+import { StyleSheet, View, KeyboardAvoidingView, Button } from "react-native";
+import { useDispatch } from "react-redux";
 
+import * as authActions from "../store/actions/auth";
 import Card from "../components/Card";
 import Input from "../components/Input";
 import Colors from "../constants/Colors";
@@ -38,6 +33,9 @@ const formReducer = (state, action) => {
 };
 
 const AuthScreen = (props) => {
+  const [isSignup, setIsSignup] = useState(false);
+  const dispatch = useDispatch();
+
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       email: "",
@@ -49,6 +47,15 @@ const AuthScreen = (props) => {
     },
     formIsValid: false,
   });
+
+  const signupHandler = () => {
+    dispatch(
+      authActions.signup(
+        formState.inputValues.email,
+        formState.inputValues.password
+      )
+    );
+  };
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -94,16 +101,18 @@ const AuthScreen = (props) => {
         />
         <View style={styles.buttonContainer}>
           <Button
-            title={"Login"}
-            color={Colors.primaryColor}
-            onPress={() => {}}
+            title={isSignup ? "Sign Up" : "Login"}
+            color={Colors.primary}
+            onPress={signupHandler}
           />
         </View>
         <View style={styles.buttonContainer}>
           <Button
-            title={`Switch to Sign Up"`}
-            color={Colors.accentColor}
-            onPress={() => {}}
+            title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
+            color={Colors.accent}
+            onPress={() => {
+              setIsSignup((prevState) => !prevState);
+            }}
           />
         </View>
       </Card>
