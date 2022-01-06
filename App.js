@@ -7,12 +7,14 @@ import ReduxThunk from "redux-thunk";
 import { Provider } from "react-redux";
 import AppNavigator from "./navigation/AppNavigator";
 import mealsReducer from "./store/reducers/meals";
+import authReducer from "./store/reducers/auth";
 
 enableScreens(); // improved perf for larger apps -  configure react-navigation to use screens instead of plain RN Views for rendering screen views
 
 // supports merging various reducers
 const rootReducer = combineReducers({
   meals: mealsReducer,
+  auth: authReducer,
 });
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
