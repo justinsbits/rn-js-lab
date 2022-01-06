@@ -1,5 +1,6 @@
 export const SIGNUP = "SIGNUP";
 export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGIN";
 
 export const signup = (email, password) => {
   return async (dispatch) => {
@@ -85,4 +86,8 @@ export const login = (email, password) => {
 
     dispatch({ type: LOGIN, token: resData.idToken, userId: resData.localId });
   };
+};
+
+export const logout = () => {
+  return { type: LOGOUT };
 };

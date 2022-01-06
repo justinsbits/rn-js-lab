@@ -1,7 +1,11 @@
-import { Platform } from "react-native";
+import { Platform, SafeAreaView, Button, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+  createDrawerNavigator,
+  DrawerItemList,
+} from "@react-navigation/drawer";
+import { useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 
 import CategoriesScreen, {
@@ -20,6 +24,7 @@ import FiltersScreen, { filtersScreenOptions } from "../screens/FiltersScreen";
 import AuthScreen, { authScreenOptions } from "../screens/AuthScreen";
 
 import Colors from "../constants/Colors";
+import * as authActions from "../store/actions/auth";
 
 // applied to all screens in navigator
 // merged with navigator options as well as navigationOptions on component
@@ -77,8 +82,26 @@ const mainDrawerFiltersNavOptions = {
 
 const MainMealsDrawerNav = createDrawerNavigator();
 export const MainMealsDrawerNavigator = (props) => {
+  const dispatch = useDispatch();
+
   return (
     <MainMealsDrawerNav.Navigator
+      drawerContent={(props) => {
+        return (
+          <View style={{ flex: 1, paddingTop: 20 }}>
+            <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+              <DrawerItemList {...props} />
+              <Button
+                title="Logout"
+                color={Colors.primary}
+                onPress={() => {
+                  dispatch(authActions.logout());
+                }}
+              />
+            </SafeAreaView>
+          </View>
+        );
+      }}
       drawerContentOptions={mainDrawerContentOptions}
     >
       <MainMealsDrawerNav.Screen
